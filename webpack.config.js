@@ -17,6 +17,13 @@ module.exports = {
     }]
   },
   resolve: {
+    root: __dirname,
+    alias: {
+      Search_bar: 'src/components/search-bar.jsx',
+      Video_detail: 'src/compnents/video-detail.jsx',
+      Video_list_item: 'src/components/video-list-item.jsx',
+      Video_list: 'src/components/video-list.jsx'
+    },
     extensions: ['', '.js', '.jsx']
   },
   devServer: {
