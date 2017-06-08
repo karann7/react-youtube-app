@@ -9,7 +9,6 @@ const App = () => {
       <SearchBar />
     </div>
   )
-  
 }
 
 ReactDOM.render(<App/>, document.querySelector('.container'));
