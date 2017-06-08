@@ -1,8 +1,8 @@
 import React from 'react';
 
-const VideoDetail = ({video}) => {
+const VideoDetail = ({video, searchVideos}) => {
   if(!video){
-    return <h1>Loading...</h1>
+    return <h2>Search for a video above and press Enter.</h2>
   }
   const videoId = video.id.videoId;
   const url = `https://www.youtube.com/embed/${videoId}`;

@@ -16,13 +16,12 @@ class App extends Component {
       videos: [],
       selectedVideo: null
     };
-    this.videoSearch('surfboards');
   }
   videoSearch(term){
     YTSearch({key: API_KEY, term: term}, (videos) => {
       this.setState({
         videos: videos,
-        selectedVideo: videos[1]
+        selectedVideo: videos[0]
       });
     });
   }
