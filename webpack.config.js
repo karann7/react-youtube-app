@@ -20,7 +20,7 @@ module.exports = {
     root: __dirname,
     alias: {
       Search_bar: 'src/components/search-bar.jsx',
-      Video_detail: 'src/compnents/video-detail.jsx',
+      Video_detail: 'src/components/video-detail.jsx',
       Video_list_item: 'src/components/video-list-item.jsx',
       Video_list: 'src/components/video-list.jsx'
     },
