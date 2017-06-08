@@ -100,28 +100,49 @@
 
 	    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-	    _this.state = { videos: [] };
-	    (0, _youtubeApiSearch2.default)({ key: API_KEY, term: '{dogs}' }, function (videos) {
-	      _this.setState({ videos: videos });
-	    });
+	    _this.state = {
+	      videos: [],
+	      selectedVideo: null
+	    };
 	    return _this;
 	  }
 
 	  _createClass(App, [{
+	    key: 'videoSearch',
+	    value: function videoSearch(term) {
+	      var _this2 = this;
+
+	      (0, _youtubeApiSearch2.default)({ key: API_KEY, term: term }, function (videos) {
+	        _this2.setState({
+	          videos: videos,
+	          selectedVideo: videos[0]
+	        });
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this3 = this;
+
 	      return _react2.default.createElement(
 	        'div',
 	        null,
-	        _react2.default.createElement(_Search_bar2.default, null),
+	        _react2.default.createElement(_Search_bar2.default, { onSearchTermChange: function onSearchTermChange(term) {
+	            return _this3.videoSearch(term);
+	          } }),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'container' },
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'row' },
-	            _react2.default.createElement(_Video_detail2.default, { video: this.state.videos[0] }),
-	            _react2.default.createElement(_Video_list2.default, { videos: this.state.videos })
+	            _react2.default.createElement(_Video_detail2.default, { video: this.state.selectedVideo }),
+	            _react2.default.createElement(_Video_list2.default, {
+	              onVideoSelect: function onVideoSelect(selectedVideo) {
+	                return _this3.setState({ selectedVideo: selectedVideo });
+	              },
+	              videos: this.state.videos
+	            })
 	          )
 	        )
 	      );
@@ -20797,6 +20818,7 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	// Class Based Component
 	var SearchBar = function (_Component) {
 	  _inherits(SearchBar, _Component);
 
@@ -20816,13 +20838,28 @@
 
 	      return _react2.default.createElement(
 	        'div',
-	        null,
-	        _react2.default.createElement('input', { id: 'inputt',
+	        { className: 'search-bar' },
+	        _react2.default.createElement('input', { idName: 'search-bar-input',
 	          value: this.state.term,
-	          onChange: function onChange(event) {
-	            return _this2.setState({ term: event.target.value });
+	          onChange: function onChange(e) {
+	            return _this2.searchTerm(e.target.value);
+	          },
+	          onKeyPress: function onKeyPress(e) {
+	            return _this2.searchQuery(e);
 	          } })
 	      );
+	    }
+	  }, {
+	    key: 'searchTerm',
+	    value: function searchTerm(term) {
+	      this.setState({ term: term });
+	    }
+	  }, {
+	    key: 'searchQuery',
+	    value: function searchQuery(e) {
+	      if (e.which === 13 && this.state.term) {
+	        this.props.onSearchTermChange(this.state.term);
+	      }
 	    }
 	  }]);
 
@@ -20851,11 +20888,13 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var VideoList = function VideoList(_ref) {
-	  var videos = _ref.videos;
-
-	  var videoItems = videos.map(function (video) {
-	    return _react2.default.createElement(_Video_list_item2.default, { key: video.etag, video: video });
+	var VideoList = function VideoList(props) {
+	  var videoItems = props.videos.map(function (video) {
+	    return _react2.default.createElement(_Video_list_item2.default, {
+	      onVideoSelect: props.onVideoSelect,
+	      key: video.etag,
+	      video: video
+	    });
 	  });
 	  return _react2.default.createElement(
 	    'ul',
@@ -20882,13 +20921,17 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var VideoListItem = function VideoListItem(_ref) {
-	  var video = _ref.video;
+	  var video = _ref.video,
+	      onVideoSelect = _ref.onVideoSelect;
 
 	  var title = video.snippet.title;
 	  var imageUrl = video.snippet.thumbnails.default.url;
+
 	  return _react2.default.createElement(
 	    "li",
-	    { className: "list-group-item" },
+	    { onClick: function onClick() {
+	        return onVideoSelect(video);
+	      }, className: "list-group-item" },
 	    _react2.default.createElement(
 	      "div",
 	      { className: "video-list media" },
@@ -20929,13 +20972,14 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var VideoDetail = function VideoDetail(_ref) {
-	  var video = _ref.video;
+	  var video = _ref.video,
+	      searchVideos = _ref.searchVideos;
 
 	  if (!video) {
 	    return _react2.default.createElement(
-	      "h1",
+	      "h2",
 	      null,
-	      "Loading..."
+	      "Search for a video above and press Enter."
 	    );
 	  }
 	  var videoId = video.id.videoId;
