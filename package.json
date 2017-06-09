@@ -1,7 +1,7 @@
 {
   "name": "Youtube-clone",
   "version": "1.0.0",
-  "description": "Youtube clone using Redux, and Youtube API.",
+  "description": "Youtube clone using React, and Youtube API.",
   "main": "index.js",
   "repository": "git@github.com:karann7/react-youtube-app.git",
   "scripts": {
